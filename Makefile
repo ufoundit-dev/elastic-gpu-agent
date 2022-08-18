@@ -11,7 +11,7 @@ all: image
 
 image:
 	@echo "building elastic-gpu-agent docker image..."
-	docker build -t  elastic-gpu-agent:$(TAG) -f Dockerfile .
+	docker build -t  hub.ufoundit.com.cn/mirror/elastic-gpu-agent:$(TAG) -f Dockerfile .
 
 test:
 	echo $(TAG)
