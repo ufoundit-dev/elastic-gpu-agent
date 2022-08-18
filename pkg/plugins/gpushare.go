@@ -156,6 +156,7 @@ func NewGPUShareMemoryDevicePlugin(config *GPUPluginConfig) (pluginapi.DevicePlu
 	if err != nil {
 		return nil, err
 	}
+	klog.Infof("NewGPUShareMemoryDevicePlugin->Devices got %+v\n", devs)
 	devices := make([]*pluginapi.Device, 0)
 	for i, d := range devs {
 		for j := uint64(0); j < d.Memory/1024/1024; j++ {
