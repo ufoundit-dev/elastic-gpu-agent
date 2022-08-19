@@ -164,6 +164,16 @@ func (c *GPUShareMemoryDevicePlugin) ListAndWatch(empty *pluginapi.Empty, server
 	return c.baseDevicePlugin.ListAndWatch(empty, server)
 }
 
+func (c *GPUShareCoreDevicePlugin) ListAndWatch(empty *pluginapi.Empty, server pluginapi.DevicePlugin_ListAndWatchServer) error {
+	once.Do(func() {
+		klog.Infof("GPUShareCoreDevicePlugin::ListAndWatch return %d devices\n", len(c.baseDevicePlugin.devices))
+		if len(c.baseDevicePlugin.devices) > 0 {
+			klog.Infof("GPUShareCoreDevicePlugin::ListAndWatch return devices[0] is %+v\n", c.baseDevicePlugin.devices[0])
+		}
+	})
+	return c.baseDevicePlugin.ListAndWatch(empty, server)
+}
+
 func NewGPUShareMemoryDevicePlugin(config *GPUPluginConfig) (pluginapi.DevicePluginServer, error) {
 	devs, err := config.GPUOperator.Devices()
 	if err != nil {
