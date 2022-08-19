@@ -234,7 +234,7 @@ func NewGPUSharePlugin(c *GPUPluginConfig) (GPUPlugin, error) {
 	}
 
 	dpTest, err := NewTestDevicePlugin(c)
-	gp.plugins[string(v1alpha1.ResourceGPUCore)] = &DevicePluginServer{
+	gp.plugins[ResourceTest] = &DevicePluginServer{
 		Endpoint:           "michael-mo-test.sock",
 		ResourceName:       string(ResourceTest),
 		PreStartRequired:   true,
