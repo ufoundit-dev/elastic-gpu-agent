@@ -25,7 +25,7 @@ func NewGPUShareCoreDevicePlugin(config *GPUPluginConfig) (*GPUShareCoreDevicePl
 	for i, _ := range devs {
 		for j := uint64(0); j < common.GPUPercentEachCard; j++ {
 			devices = append(devices, &pluginapi.Device{
-				ID:     fmt.Sprintf("%d-%02d", i, j),
+				ID:     fmt.Sprintf("GPU-CORE-%d-%02d", i, j),
 				Health: pluginapi.Healthy,
 			})
 		}
@@ -182,7 +182,7 @@ func NewGPUShareMemoryDevicePlugin(config *GPUPluginConfig) (pluginapi.DevicePlu
 		klog.Infof("Devices[%d] is %+v\n", i, d)
 		for j := uint64(0); j < d.Memory/1024/1024; j++ {
 			devices = append(devices, &pluginapi.Device{
-				ID:     fmt.Sprintf("%d-%02d", i, j),
+				ID:     fmt.Sprintf("GPU-MEMORY-%d-%02d", i, j),
 				Health: pluginapi.Healthy,
 			})
 		}
