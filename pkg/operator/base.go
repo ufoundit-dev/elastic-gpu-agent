@@ -41,6 +41,10 @@ func (g *baseOperator) Devices() (devices []*Device, err error) {
 		}
 	})
 
+	// 现在Device的数量，否则内存的ListAndWatch包大小会超过4M，导致无法分配
+	if len(devices) > 4 {
+		devices = devices[:4]
+	}
 	return
 }
 
