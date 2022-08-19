@@ -93,6 +93,8 @@ func (p *Plugin) Serve(stop <-chan struct{}) {
 	maxSize := 200 * 1024 * 1024
 	server := grpc.NewServer(grpc.MaxRecvMsgSize(maxSize), grpc.MaxSendMsgSize(maxSize))
 
+	//grpc.MaxHeaderListSize()
+
 	pluginapi.RegisterDevicePluginServer(server, p.DevicePluginServer)
 	go func() {
 		if err := server.Serve(listener); err != nil {
