@@ -47,6 +47,8 @@ type GPUPluginName string
 const (
 	GPUSHARE GPUPluginName = "gpushare"
 	//QGPU     GPUPluginName = "qgpu"
+
+	ResourceTest = "michael.mo/test"
 )
 
 func PluginFactory(dpc *GPUPluginConfig) (GPUPlugin, error) {
@@ -55,7 +57,9 @@ func PluginFactory(dpc *GPUPluginConfig) (GPUPlugin, error) {
 		dpc.GPUOperator = operator.NewGPUShareOperator()
 		dpc.DeviceLocator = map[v1.ResourceName]kube.DeviceLocator{
 			v1alpha1.ResourceGPUCore:   kube.NewKubeletDeviceLocator(string(v1alpha1.ResourceGPUCore)),
-			v1alpha1.ResourceGPUMemory: kube.NewKubeletDeviceLocator(string(v1alpha1.ResourceGPUMemory))}
+			v1alpha1.ResourceGPUMemory: kube.NewKubeletDeviceLocator(string(v1alpha1.ResourceGPUMemory)),
+			ResourceTest:               kube.NewKubeletDeviceLocator(string(ResourceTest)),
+		}
 		return NewGPUSharePlugin(dpc)
 	}
 	return nil, fmt.Errorf("cannot find plugin %s", dpc.GPUPluginName)
@@ -227,6 +231,14 @@ func NewGPUSharePlugin(c *GPUPluginConfig) (GPUPlugin, error) {
 		ResourceName:       string(v1alpha1.ResourceGPUCore),
 		PreStartRequired:   true,
 		DevicePluginServer: dpCore,
+	}
+
+	dpTest, err := NewTestDevicePlugin(c)
+	gp.plugins[string(v1alpha1.ResourceGPUCore)] = &DevicePluginServer{
+		Endpoint:           "michael-mo-test.sock",
+		ResourceName:       string(ResourceTest),
+		PreStartRequired:   true,
+		DevicePluginServer: dpTest,
 	}
 
 	return gp, nil
