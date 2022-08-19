@@ -80,9 +80,14 @@ func (c *baseDevicePlugin) GetDevicePluginOptions(ctx context.Context, empty *pl
 }
 
 func (c *baseDevicePlugin) ListAndWatch(empty *pluginapi.Empty, server pluginapi.DevicePlugin_ListAndWatchServer) error {
-	if err := server.Send(&pluginapi.ListAndWatchResponse{Devices: c.devices}); err != nil {
-		return err
+	for i := 0; i < len(c.devices); i++ {
+		if err := server.Send(&pluginapi.ListAndWatchResponse{Devices: c.devices[i : i+1]}); err != nil {
+			return err
+		}
 	}
+	//if err := server.Send(&pluginapi.ListAndWatchResponse{Devices: c.devices}); err != nil {
+	//	return err
+	//}
 	<-server.Context().Done()
 	return nil
 }
