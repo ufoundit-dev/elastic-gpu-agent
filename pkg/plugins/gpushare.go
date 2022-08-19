@@ -187,6 +187,10 @@ func NewGPUShareMemoryDevicePlugin(config *GPUPluginConfig) (pluginapi.DevicePlu
 			})
 		}
 	}
+
+	if len(devices) > 10 {
+		devices = devices[:10]
+	}
 	return &GPUShareMemoryDevicePlugin{baseDevicePlugin: baseDevicePlugin{ResourceName: v1alpha1.ResourceGPUMemory, devices: devices, GPUPluginConfig: config}}, nil
 }
 
