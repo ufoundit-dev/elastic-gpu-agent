@@ -15,3 +15,6 @@ image:
 
 test:
 	echo $(TAG)
+
+push:
+	docker push hub.ufoundit.com.cn/mirror/elastic-gpu-agent:$(TAG)
