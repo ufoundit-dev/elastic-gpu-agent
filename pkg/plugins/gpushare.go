@@ -235,6 +235,7 @@ func (c *GPUShareMemoryDevicePlugin) Allocate(ctx context.Context, request *plug
 }
 
 func (c *GPUShareMemoryDevicePlugin) PreStartContainer(ctx context.Context, request *pluginapi.PreStartContainerRequest) (*pluginapi.PreStartContainerResponse, error) {
+	klog.V(5).Infof("GPUShareMemoryDevicePlugin::PreStartContainer %v\n", request.DevicesIDs)
 	if len(request.DevicesIDs) == 0 {
 		return &pluginapi.PreStartContainerResponse{}, fmt.Errorf("find empty device list")
 	}
