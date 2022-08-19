@@ -10,6 +10,7 @@ import (
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type GPUShareCoreDevicePlugin struct {
@@ -149,6 +150,18 @@ func (c *GPUShareCoreDevicePlugin) PreStartContainer(ctx context.Context, reques
 
 type GPUShareMemoryDevicePlugin struct {
 	baseDevicePlugin
+}
+
+var once sync.Once
+
+func (c *GPUShareMemoryDevicePlugin) ListAndWatch(empty *pluginapi.Empty, server pluginapi.DevicePlugin_ListAndWatchServer) error {
+	once.Do(func() {
+		klog.Infof("GPUShareMemoryDevicePlugin::ListAndWatch return %d devices\n", len(c.baseDevicePlugin.devices))
+		if len(c.baseDevicePlugin.devices) > 0 {
+			klog.Infof("GPUShareMemoryDevicePlugin::ListAndWatch return devices[0] is %+v\n", c.baseDevicePlugin.devices[0])
+		}
+	})
+	return c.baseDevicePlugin.ListAndWatch(empty, server)
 }
 
 func NewGPUShareMemoryDevicePlugin(config *GPUPluginConfig) (pluginapi.DevicePluginServer, error) {
